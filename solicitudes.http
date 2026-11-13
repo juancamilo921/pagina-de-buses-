@@ -1,0 +1,76 @@
+@baseUrl = http://localhost:3000
+@adminToken = PEGA_AQUI_EL_TOKEN_ADMIN
+@clienteToken = PEGA_AQUI_EL_TOKEN_CLIENTE
+
+### 1. Comprobar que el servidor está activo
+GET {{baseUrl}}/api/health
+
+### 2. Consultar todas las salidas disponibles (pública)
+GET {{baseUrl}}/api/catalog/schedules
+
+### 3. Buscar salidas por origen y destino
+GET {{baseUrl}}/api/catalog/schedules?origin=Medell%C3%ADn&destination=Bello
+
+### 4. Iniciar sesión como administrador
+# Copia el campo "token" de la respuesta y pégalo arriba en @adminToken.
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@transporte.local",
+  "password": "Admin123*"
+}
+
+### 5. Consultar rutas como administrador
+GET {{baseUrl}}/api/admin/routes
+Authorization: Bearer {{adminToken}}
+
+### 6. Buscar una ruta por texto
+GET {{baseUrl}}/api/admin/routes?search=Medell%C3%ADn
+Authorization: Bearer {{adminToken}}
+
+### 7. Consultar vehículos
+GET {{baseUrl}}/api/admin/vehicles
+Authorization: Bearer {{adminToken}}
+
+### 8. Consultar clientes
+GET {{baseUrl}}/api/admin/clients
+Authorization: Bearer {{adminToken}}
+
+### 9. Consultar reservas
+GET {{baseUrl}}/api/admin/reservations
+Authorization: Bearer {{adminToken}}
+
+### 10. Iniciar sesión como cliente
+# Copia el campo "token" de la respuesta y pégalo arriba en @clienteToken.
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "cliente@transporte.local",
+  "password": "Cliente123*"
+}
+
+### 11. Consultar las reservas propias del cliente
+GET {{baseUrl}}/api/client/reservations
+Authorization: Bearer {{clienteToken}}
+
+### 12. Consultar programaciones asignadas al conductor (usa token de conductor)
+GET {{baseUrl}}/api/driver/schedules
+Authorization: Bearer PEGA_AQUI_EL_TOKEN_CONDUCTOR
+
+### 13. Ejemplo de creación de ruta (modifica datos de demostración)
+# Ejecútalo solo si quieres agregar una ruta nueva al proyecto local.
+POST {{baseUrl}}/api/admin/routes
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "origin": "Medellín",
+  "destination": "Santa Fe de Antioquia",
+  "distanceKm": 58,
+  "estimatedDurationMinutes": 95,
+  "price": 35000,
+  "active": true
+}
+
